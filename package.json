@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "author": {
-    "name": "Felipe Rosas",
+    "name": "Felipe RosasX",
     "email": "contato@eufelipe.com",
     "url": "http://eufelipe.com"
   },
@@ -11,7 +11,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format:check": "prettier --check ./src",
+    "format:write": "prettier --write ./src",
+    "lint:check": "eslint ./src",
+    "lint:fix": "eslint ./src --fix",
+    "prepare": "husky"
   },
   "dependencies": {
     "next": "14.1.4",
@@ -27,6 +32,7 @@
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.1.4",
+    "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.1",
