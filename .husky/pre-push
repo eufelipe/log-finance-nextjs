@@ -1,1 +1,1 @@
-git diff HEAD --quiet && npm run test && npm run build
+git diff HEAD --quiet && npm run test:ci && npm run build
