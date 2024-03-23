@@ -1,9 +1,45 @@
+"use client";
+
+import { signIn, signOut, useSession } from "next-auth/react";
+import Image from "next/image";
+
 export default function Home() {
+  const { data: session } = useSession();
+
+  if (session) {
+    return (
+      <div className="w-full h-screen flex flex-col justify-center items-center">
+        <div className="w-44 h-44 relative mb-4">
+          <Image
+            src={session.user?.image as string}
+            fill
+            alt=""
+            className="object-cover rounded-full"
+          />
+        </div>
+        <p className="text-2xl mb-2">
+          <span className="font-bold">{session.user?.name}</span>.
+        </p>
+        <p className="font-bold mb-4">{session.user?.email}</p>
+        <button
+          className="bg-red-600 py-2 px-6 rounded-md"
+          onClick={() => signOut()}
+        >
+          Sign out
+        </button>
+      </div>
+    );
+  }
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-green-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-green-700 before:dark:opacity-10 after:dark:from-green-900 after:dark:via-[#006712] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <h1 className="text-4xl font-extrabold dark:text-white" >Log Finance</h1>
-      </div> 
-    </main>
+    <div className="w-full h-screen flex flex-col justify-center items-center">
+      <p className="text-2xl mb-2">Not Signed In</p>
+      <button
+        className="bg-blue-600 py-2 px-6 rounded-md mb-2"
+        onClick={() => signIn("google")}
+      >
+        Sign in with google
+      </button>
+    </div>
   );
 }
