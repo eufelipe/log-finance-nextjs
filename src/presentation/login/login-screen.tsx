@@ -12,8 +12,7 @@ export default function LoginScreen() {
         <div className="md:relative md:w-3/5 hidden md:block">
           <Image
             src="/hero.webp"
-            width={1792}
-            height={1024}
+            fill
             alt="Hero Background"
             quality={100}
             className="object-cover object-center absolute inset-0 z-0"
