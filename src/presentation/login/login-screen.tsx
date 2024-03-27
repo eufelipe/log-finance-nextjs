@@ -1,6 +1,6 @@
 "use client";
 
-import { Header } from "@/app/components";
+import { Header } from "@/presentation/components";
 import Image from "next/image";
 
 export default function LoginScreen() {

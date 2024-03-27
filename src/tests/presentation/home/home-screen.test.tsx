@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import SessionWrapper from "@/app/components/SessionWrapper";
 import { HomeScreen } from "@/presentation";
+import { AuthSessionProvider } from "@/presentation/components";
 
 vi.mock("@/app/components/Header", () => ({
   Header: () => <div>Mocked Header</div>,
@@ -30,9 +30,9 @@ describe("Home Screen", () => {
     } as any;
 
     render(
-      <SessionWrapper>
+      <AuthSessionProvider>
         <HomeScreen session={sessionMock} />
-      </SessionWrapper>,
+      </AuthSessionProvider>,
     );
 
     expect(screen.findByText(/Jane Doe/i)).not.toBeNull();

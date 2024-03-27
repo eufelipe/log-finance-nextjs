@@ -1,6 +1,6 @@
 "use client";
 
-import { Header } from "@/app/components";
+import { Header } from "@/presentation/components";
 import { Session } from "next-auth";
 import Image from "next/image";
 
