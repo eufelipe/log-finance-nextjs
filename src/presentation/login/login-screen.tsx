@@ -3,10 +3,6 @@
 import { Header } from "@/app/components";
 import Image from "next/image";
 
-const BASE_ASSES_URL = "https://res.cloudinary.com/eufelipe/image/upload";
-
-const HERO_IMAGE_URL = `${BASE_ASSES_URL}/v1711319955/LogFinance/hero_o9i0nh.webp`;
-
 export default function LoginScreen() {
   return (
     <div className="flex flex-col h-screen">
@@ -15,10 +11,10 @@ export default function LoginScreen() {
       <div className="flex-grow flex flex-col md:flex-row">
         <div className="md:relative md:w-3/5 hidden md:block">
           <Image
-            src={HERO_IMAGE_URL}
+            src="/hero.webp"
+            width={1792}
+            height={1024}
             alt="Hero Background"
-            layout="fill"
-            objectFit="cover"
             quality={100}
             className="object-cover object-center absolute inset-0 z-0"
           />
