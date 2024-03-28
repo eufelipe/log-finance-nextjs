@@ -8,5 +8,17 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "jsdom",
+    includeSource: ["src/**/*.{ts,tsx}"],
+    coverage: {
+      provider: "istanbul", // or 'v8'
+      exclude: [
+        "*.js",
+        "tailwind.config.ts",
+        "**/tests/**",
+        "**/app/**",
+        "**/.next/**",
+        "node_modules/**",
+      ],
+    },
   },
 });
