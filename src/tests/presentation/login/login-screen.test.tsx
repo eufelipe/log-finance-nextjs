@@ -4,6 +4,8 @@ import { describe, expect, it, vi } from "vitest";
 
 vi.mock("next-auth/react", () => ({
   useSession: vi.fn().mockReturnValue({ data: null }),
+  signIn: vi.fn(),
+  signOut: vi.fn(),
 }));
 
 vi.mock("@/app/components/Header", () => ({

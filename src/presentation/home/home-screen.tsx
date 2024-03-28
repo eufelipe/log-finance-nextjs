@@ -2,6 +2,7 @@
 
 import { Header } from "@/presentation/components";
 import { Session } from "next-auth";
+import { signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 
 type HomeScreenProps = {
@@ -9,9 +10,15 @@ type HomeScreenProps = {
 };
 
 export default function HomeScreen({ session }: HomeScreenProps) {
+  const isAuthenticated = !!session;
+
   return (
     <div className="flex flex-col h-screen">
-      <Header />
+      <Header
+        isAuthenticated={isAuthenticated}
+        handleSignIn={signIn}
+        handleSignOut={signOut}
+      />
 
       <div className="w-full h-screen flex flex-col justify-center items-center">
         <div className="w-44 h-44 relative mb-4">

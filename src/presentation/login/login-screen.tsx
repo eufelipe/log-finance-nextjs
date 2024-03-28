@@ -1,12 +1,17 @@
 "use client";
 
 import { Header } from "@/presentation/components";
+import { signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 
 export default function LoginScreen() {
   return (
     <div className="flex flex-col h-screen">
-      <Header />
+      <Header
+        isAuthenticated={false}
+        handleSignIn={signIn}
+        handleSignOut={signOut}
+      />
 
       <div className="flex-grow flex flex-col md:flex-row">
         <div className="md:relative md:w-3/5 hidden md:block">

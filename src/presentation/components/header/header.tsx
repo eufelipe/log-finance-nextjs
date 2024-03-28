@@ -1,17 +1,22 @@
 "use client";
 
-import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 
 const BASE_ASSES_URL = "https://res.cloudinary.com/eufelipe/image/upload";
 
 const LOGO_URL = `${BASE_ASSES_URL}/v1642222955/play_store_512_zr4qam.png`;
 
-const Header = () => {
-  const { data: session } = useSession();
+export type HeaderProps = {
+  isAuthenticated: boolean;
+  handleSignIn: () => void;
+  handleSignOut: () => void;
+};
 
-  const isAuthenticated = !!session;
-
+const Header = ({
+  isAuthenticated,
+  handleSignIn,
+  handleSignOut,
+}: HeaderProps) => {
   return (
     <div className="flex items-center justify-between px-4 bg-white h-20 shadow-md">
       <div className="flex items-center">
@@ -23,7 +28,7 @@ const Header = () => {
 
       {!isAuthenticated && (
         <button
-          onClick={() => signIn("google")}
+          onClick={handleSignIn}
           className="bg-primary-dark hover:bg-green-500 text-white py-2 px-4 rounded transition ease-in-out duration-150"
         >
           Sign in with Google
@@ -32,7 +37,7 @@ const Header = () => {
 
       {isAuthenticated && (
         <button
-          onClick={() => signOut()}
+          onClick={handleSignOut}
           className="bg-primary-dark hover:bg-green-500 text-white py-2 px-4 rounded transition ease-in-out duration-150"
         >
           Sign Out
