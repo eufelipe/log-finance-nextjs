@@ -10,5 +10,5 @@ export interface Authentication {
 export namespace Authentication {
   export type Input = { email: string };
 
-  export type Output = Account;
+  export type Output = Account | null;
 }
