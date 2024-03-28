@@ -4,7 +4,7 @@ type Input = LoadAccountByEmailRepository.Input;
 type Output = LoadAccountByEmailRepository.Output;
 
 export interface LoadAccountByEmailRepository {
-  loadByEmail: (input: Input) => Promise<Output>;
+  loadByEmail: (input: Input) => Promise<Output | null>;
 }
 
 export namespace LoadAccountByEmailRepository {
