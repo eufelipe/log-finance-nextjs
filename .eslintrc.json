@@ -5,6 +5,7 @@
     "plugin:prettier/recommended"
   ],
   "rules": {
+    "@typescript-eslint/no-namespace": "off",
     "prettier/prettier": "error",
     "react/display-name": "off",
     "@next/next/no-img-element": "off",
