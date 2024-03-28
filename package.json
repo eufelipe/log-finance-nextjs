@@ -16,6 +16,7 @@
     "format:write": "prettier --write ./src",
     "lint:check": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
+    "cspell": "cspell \"./src/**/*\" --no-progress --show-suggestions --show-context \"**/*.md\"",
     "test": "vitest --silent",
     "test:ci": "vitest run --silent",
     "prepare": "husky"
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@commitlint/cli": "^19.2.1",
     "@commitlint/config-conventional": "^19.1.0",
+    "@cspell/dict-pt-br": "^2.3.0",
     "@testing-library/react": "^14.2.2",
     "@types/node": "^20.11.30",
     "@types/react": "^18.2.69",
@@ -36,6 +38,7 @@
     "@typescript-eslint/eslint-plugin": "^7.3.1",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.19",
+    "cspell": "^8.6.1",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.1.4",
     "eslint-config-prettier": "^9.1.0",
