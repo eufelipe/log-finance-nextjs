@@ -8,8 +8,10 @@ export default function Root() {
     session: { isAuthenticated, user },
   } = useAuth();
 
-  if (isAuthenticated) {
-    return <HomeScreen isAuthenticated {...user} />;
+  console.log("user", user);
+
+  if (isAuthenticated && !!user) {
+    return <HomeScreen user={user} />;
   }
 
   return <LoginScreen />;

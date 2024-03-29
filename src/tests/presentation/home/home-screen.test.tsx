@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
+import AuthSessionProvider from "@/infra/auth/AuthSessionProvider";
 import { HomeScreen } from "@/presentation";
-import { AuthSessionProvider } from "@/presentation/components";
 
 vi.mock("@/app/components/Header", () => ({
   Header: () => <div>Mocked Header</div>,
@@ -19,19 +19,18 @@ describe("Home Screen", () => {
     });
 
     const sessionMock = {
-      data: {
-        user: {
-          name: "Jane Doe",
-          email: "jane@example.com",
-          image: "https://example.com/jane.jpg",
-        },
+      user: {
+        name: "Jane Doe",
+        email: "jane@example.com",
+        image: "https://example.com/jane.jpg",
       },
-      status: "authenticated",
+
+      isAuthenticated: true,
     } as any;
 
     render(
       <AuthSessionProvider>
-        <HomeScreen session={sessionMock} />
+        <HomeScreen {...sessionMock} />
       </AuthSessionProvider>,
     );
 
