@@ -1,13 +1,15 @@
 "use client";
 
+import { useAuth } from "@/app/contexts/AuthProvider";
 import { HomeScreen, LoginScreen } from "@/presentation";
-import { useSession } from "next-auth/react";
 
 export default function Root() {
-  const { data: session } = useSession();
+  const {
+    session: { isAuthenticated, user },
+  } = useAuth();
 
-  if (session) {
-    return <HomeScreen session={session} />;
+  if (isAuthenticated) {
+    return <HomeScreen isAuthenticated {...user} />;
   }
 
   return <LoginScreen />;
