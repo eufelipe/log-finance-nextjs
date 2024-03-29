@@ -11,6 +11,6 @@ export interface AuthSession {
 
 export interface UseAuthReturn {
   session: AuthSession;
-  signIn: () => void;
+  signIn: (provider: string) => void;
   signOut: () => Promise<void>;
 }

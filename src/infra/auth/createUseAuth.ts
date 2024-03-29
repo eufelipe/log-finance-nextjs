@@ -1,35 +1,20 @@
-"use client";
-
 import { UseAuthReturn, User } from "@/domain/models";
-import { Session } from "next-auth";
-import {
-  signIn as nextSignIn,
-  signOut as nextSignOut,
-  useSession,
-} from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
-export const createUseAuth = (signInProvider: string) => (): UseAuthReturn => {
-  if (!signInProvider) throw new Error("No provider was provided");
-
+export const createUseAuth = () => (): UseAuthReturn => {
   const { data: sessionData, status } = useSession();
 
-  const isAuthenticated =
-    status === "authenticated" && !!sessionData?.user?.email;
+  const userData = sessionData?.user;
 
-  const createUserFromSession = (sessionData: Session): User | undefined => {
-    const email = sessionData.user?.email ?? "";
-    if (!email) return undefined;
-
-    return {
-      name: sessionData.user?.name ?? "guest",
-      email,
-      image: sessionData.user?.image || undefined,
-    };
-  };
+  const isAuthenticated = status === "authenticated" && !!userData?.email;
 
   const user: User | undefined =
-    isAuthenticated && sessionData?.user
-      ? createUserFromSession(sessionData)
+    isAuthenticated && !!userData && !!userData.email
+      ? {
+          email: userData.email,
+          name: userData?.name ?? "guest",
+          image: userData?.image ?? undefined,
+        }
       : undefined;
 
   return {
@@ -37,7 +22,7 @@ export const createUseAuth = (signInProvider: string) => (): UseAuthReturn => {
       isAuthenticated,
       user,
     },
-    signIn: () => nextSignIn(signInProvider),
-    signOut: nextSignOut,
+    signIn,
+    signOut,
   };
 };
