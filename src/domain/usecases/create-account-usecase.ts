@@ -1,5 +1,6 @@
 import { AddAccountRepository } from "@/domain/contracts/repositories";
 import { CreateAccount } from "@/domain/entities";
+import { AccountCreationError } from "@/domain/errors";
 
 type Input = CreateAccount.Input;
 type Output = CreateAccount.Output;
@@ -13,7 +14,7 @@ export class CreateAccountUseCase implements CreateAccount {
 
       return account;
     } catch (error) {
-      throw new Error("Error on CreateAccount");
+      throw new AccountCreationError("Error on CreateAccount");
     }
   }
 }

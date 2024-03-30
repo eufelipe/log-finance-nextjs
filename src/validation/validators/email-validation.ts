@@ -1,11 +1,11 @@
-import { Validator } from "@/validation/contracts";
+import { Validation } from "@/validation/contracts";
 import { InvalidEmailError, RequiredFieldError } from "@/validation/errors";
 
 interface ValidationInput {
   [key: string]: any;
 }
 
-export class EmailValidation implements Validator {
+export class EmailValidation implements Validation {
   constructor(private readonly fieldName: string) {}
 
   validate(input: ValidationInput): void {
