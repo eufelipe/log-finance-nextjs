@@ -1,4 +1,4 @@
-import { UseAuthReturn, User } from "@/domain/models";
+import { OAuthUser, UseAuthReturn } from "@/domain/models";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 export const createUseAuth = () => (): UseAuthReturn => {
@@ -8,7 +8,7 @@ export const createUseAuth = () => (): UseAuthReturn => {
 
   const isAuthenticated = status === "authenticated" && !!userData?.email;
 
-  const user: User | undefined =
+  const user: OAuthUser | undefined =
     isAuthenticated && !!userData && !!userData.email
       ? {
           email: userData.email,

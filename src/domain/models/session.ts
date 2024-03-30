@@ -1,12 +1,8 @@
-export interface User {
-  name: string;
-  email: string;
-  image?: string;
-}
+import { OAuthUser } from "./oauth-user";
 
 export interface AuthSession {
   isAuthenticated: boolean;
-  user?: User;
+  user?: OAuthUser;
 }
 
 export interface UseAuthReturn {

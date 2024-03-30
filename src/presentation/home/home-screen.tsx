@@ -3,11 +3,11 @@
 import { signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 
-import { User } from "@/domain/models";
+import { OAuthUser } from "@/domain/models";
 import { Header } from "@/presentation/components";
 
 type HomeScreenProps = {
-  user: User;
+  user: OAuthUser;
 };
 
 export default function HomeScreen({ user }: HomeScreenProps) {
