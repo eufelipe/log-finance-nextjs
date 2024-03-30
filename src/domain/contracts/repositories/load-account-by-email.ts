@@ -1,4 +1,4 @@
-import { Account } from "@/domain/models";
+import { Account, OAuthUser } from "@/domain/models";
 
 type Input = LoadAccountByEmailRepository.Input;
 type Output = LoadAccountByEmailRepository.Output;
@@ -8,6 +8,6 @@ export interface LoadAccountByEmailRepository {
 }
 
 export namespace LoadAccountByEmailRepository {
-  export type Input = string;
+  export type Input = OAuthUser;
   export type Output = Account;
 }
