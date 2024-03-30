@@ -6,6 +6,7 @@ import { AuthenticationUseCase } from "@/domain/usecases";
 import {
   LoadAccountByEmailRepositorySpy,
   makeFakeAccount,
+  makeOAuthUser,
 } from "@/tests/mocks";
 
 type SutTypes = {
@@ -23,17 +24,18 @@ const makeSut = (): SutTypes => {
   };
 };
 
+const fakeAccount = makeFakeAccount();
+const fakeOAuthUser = makeOAuthUser();
+
 describe("Authentication UseCase", () => {
   it("should return an account if LoadAccountByEmailRepository returns an account", async () => {
     const { sut, loadAccountByEmailRepositorySpy } = makeSut();
-
-    const fakeAccount = makeFakeAccount();
 
     loadAccountByEmailRepositorySpy.loadByEmail = vi
       .fn()
       .mockResolvedValue(fakeAccount);
 
-    const account = await sut.auth({ email: "valid_email@example.com" });
+    const account = await sut.auth(fakeOAuthUser);
 
     expect(account).toEqual(fakeAccount);
   });
@@ -47,7 +49,7 @@ describe("Authentication UseCase", () => {
 
     const email = "inexistent_email@example.com";
 
-    const account = await sut.auth({ email });
+    const account = await sut.auth({ ...fakeOAuthUser, email });
 
     expect(account).toBeNull();
     expect(loadSpy).toHaveBeenCalledWith(email);
@@ -57,10 +59,10 @@ describe("Authentication UseCase", () => {
     const { sut, loadAccountByEmailRepositorySpy } = makeSut();
 
     vi.spyOn(loadAccountByEmailRepositorySpy, "loadByEmail").mockRejectedValue(
-      new Error("Test error"),
+      new Error("Test error")
     );
 
-    const promise = sut.auth({ email: "any_email@example.com" });
+    const promise = sut.auth(fakeOAuthUser);
 
     await expect(promise).rejects.toThrow("Error on authentication");
   });

@@ -9,6 +9,7 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     includeSource: ["src/**/*.{ts,tsx}"],
+
     coverage: {
       provider: "istanbul", // or 'v8'
       exclude: [

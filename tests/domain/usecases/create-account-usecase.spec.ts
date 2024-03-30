@@ -7,7 +7,7 @@ import {
   AddAccountRepositorySpy,
   makeFakeAccount,
   makeOAuthUser,
-} from "@/tests/mocks";
+} from "tests/mocks";
 
 type SutTypes = {
   sut: CreateAccountUseCase;
@@ -58,7 +58,7 @@ describe("CreateAccount UseCase", () => {
     const { sut, addAccountRepositorySpy } = makeSut();
 
     vi.spyOn(addAccountRepositorySpy, "create").mockRejectedValue(
-      new Error("Test error"),
+      new Error("Test error")
     );
 
     const fakeUser = makeOAuthUser();

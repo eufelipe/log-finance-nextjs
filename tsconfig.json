@@ -21,11 +21,12 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/presentation/*": ["./src/presentation/*"],
-      "@/tests/*": ["./src/tests/*"]
+      "@/tests/*": ["./tests/*"]
     }
   },
   "include": [
     "next-env.d.ts",
+    "test/**/*",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",

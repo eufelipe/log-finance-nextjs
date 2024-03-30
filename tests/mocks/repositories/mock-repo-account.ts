@@ -1,15 +1,21 @@
 import { faker } from "@faker-js/faker";
 
+import { Account, OAuthUser } from "@/domain/models";
+
 import {
   AddAccountRepository,
   LoadAccountByEmailRepository,
 } from "@/domain/contracts/repositories";
-import { Account, OAuthUser } from "@/domain/models";
 
 export class LoadAccountByEmailRepositorySpy
   implements LoadAccountByEmailRepository
 {
-  input = faker.internet.email();
+  input: OAuthUser = {
+    name: faker.person.fullName(),
+    email: faker.internet.email(),
+    image: faker.image.avatar(),
+  };
+
   output: Account = {
     id: faker.string.uuid(),
     name: faker.person.fullName(),
@@ -18,7 +24,7 @@ export class LoadAccountByEmailRepositorySpy
   };
 
   async loadByEmail(
-    input: string,
+    input: OAuthUser
   ): Promise<LoadAccountByEmailRepository.Output> {
     this.input = input;
 
