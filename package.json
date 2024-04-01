@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "format:check": "prettier --check ./src",
     "format:write": "prettier --write ./src",
@@ -20,7 +20,8 @@
     "test": "vitest --silent",
     "test:ci": "vitest run --silent",
     "test:coverage": "vitest run --coverage --silent",
-    "prepare": "husky"
+    "prepare": "husky",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "5.11.0",
