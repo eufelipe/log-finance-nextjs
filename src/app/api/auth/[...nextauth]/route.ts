@@ -1,5 +1,8 @@
 import NextAuth from "next-auth";
 
+import { nextAuthAdapter } from "@/app/adapters";
+
+import { authenticationUseCaseFactory } from "@/app/factories";
 import GoogleProvider from "next-auth/providers/google";
 
 const handler = NextAuth({
@@ -11,30 +14,9 @@ const handler = NextAuth({
   ],
 
   callbacks: {
-    async session({ session, token, user }) {
-      console.log("session", session, token, user);
-
-      return session;
-    },
-
-    async jwt({ token, account, profile }) {
-      console.log("jwt", token, account, profile);
-
-      if (account) {
-        token.accessToken = account.access_token;
-      }
-
-      return token;
-    },
-
-    async redirect({ url, baseUrl }) {
-      console.log("url", url, baseUrl);
-
-      if (url.startsWith("/")) return `${baseUrl}${url}`;
-      else if (new URL(url).origin === baseUrl) return url;
-
-      return baseUrl;
-    },
+    signIn: nextAuthAdapter({
+      authenticationUseCase: authenticationUseCaseFactory,
+    }).signIn,
   },
 });
 
