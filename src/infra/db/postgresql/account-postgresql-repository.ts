@@ -36,8 +36,8 @@ export class AccountPostgreSqlRepository
     return {
       id: result.id,
       email: result.email,
-      name: result.name ?? "guest",
-      image: result.image ?? undefined,
+      name: result.name,
+      image: result.image,
     };
   }
 }
