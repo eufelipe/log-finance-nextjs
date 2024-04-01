@@ -5,6 +5,7 @@
 
 <h1 align="center">Log Finance WEB</h1>
 
+[![codecov](https://codecov.io/gh/eufelipe/log-finance-nextjs/graph/badge.svg?token=QQ3PMASCHL)](https://codecov.io/gh/eufelipe/log-finance-nextjs)
 
 [Versão em Português](/README.pt-br.md)
 </div>
