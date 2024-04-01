@@ -13,10 +13,10 @@ jobs:
       with:
         node-version: '20'
     - name: Install dependencies
-      run: npm install
+      run: yarn
 
     - name: Run Tests and Collect Coverage
-      run: npm run test:coverage
+      run: yarn test:coverage
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4-beta
