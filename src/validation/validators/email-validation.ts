@@ -1,22 +1,16 @@
 import { Validation } from "@/validation/contracts";
 import { InvalidEmailError, RequiredFieldError } from "@/validation/errors";
 
-interface ValidationInput {
-  [key: string]: any;
-}
-
 export class EmailValidation implements Validation {
-  constructor(private readonly fieldName: string) {}
-
-  validate(input: ValidationInput): void {
-    const email = input[this.fieldName];
-    if (!email) {
-      throw new RequiredFieldError(this.fieldName);
+  validate(input: any): void {
+    if (!input) {
+      throw new RequiredFieldError("email");
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      throw new InvalidEmailError(this.fieldName);
+
+    if (!emailRegex.test(input)) {
+      throw new InvalidEmailError();
     }
   }
 }

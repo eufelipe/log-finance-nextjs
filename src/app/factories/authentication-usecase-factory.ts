@@ -10,7 +10,7 @@ const accountPostgreSqlRepository = new AccountPostgreSqlRepository(
   prismaClient,
 );
 
-const emailValidation = new EmailValidation("email");
+const emailValidation = new EmailValidation();
 
 export const authenticationUseCaseFactory = new AuthenticationUseCase(
   accountPostgreSqlRepository,

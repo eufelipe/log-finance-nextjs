@@ -1,8 +1,8 @@
 import { ValidationError } from "./validation-error";
 
 export class InvalidEmailError extends ValidationError {
-  constructor(field: string) {
-    super(`${field} is not a valid email`);
+  constructor() {
+    super(`email is not a valid`);
     this.name = "InvalidEmailError";
   }
 }
