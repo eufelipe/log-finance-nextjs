@@ -10,17 +10,17 @@ This document describes the process of social login using Google authentication,
 
 - [x] Start: The user selects the "Login with Google" option on the login screen.
 - [x] Authentication: The user is redirected to the Google login page to authorize the application to access their basic profile information.
-- [ ] Database Verification: The application checks if the user already exists in the database using the unique identifier provided by Google.
+- [x] Database Verification: The application checks if the user already exists in the database using the unique identifier provided by Google.
 - [x] Successful Login: The user is authenticated and redirected to the homepage.
 
 ### New User Registration and Login
 
 - [x] Start: The user selects the "Login with Google" option on the login screen.
 - [x] Authentication: The user is redirected to the Google login page to authorize the application.
-- [ ] Database Verification: The application checks if the user exists in the database.
-- [ ] Automatic Registration: Since the user does not exist, the application automatically
-- [ ] creates a new record in the database using the information provided by Google.
-- [ ] Successful Login: The new user is authenticated and redirected to the homepage.
+- [x] Database Verification: The application checks if the user exists in the database.
+- [x] Automatic Registration: Since the user does not exist, the application automatically
+- [x] creates a new record in the database using the information provided by Google.
+- [x] Successful Login: The new user is authenticated and redirected to the homepage.
 
 ### Logout
 
@@ -29,8 +29,8 @@ This document describes the process of social login using Google authentication,
 
 ### Exceptions
 
-- [ ] Google Authentication Failure: If there is a failure in authentication with Google (for example, the user does not grant permission or there is a technical error on Google's side), the application should inform the user about the problem and suggest trying again later.
-- [ ] User Creation Failure: If there is a problem creating a new user record in the database (for example, database connection failure or constraint violations), the application should log the error and possibly notify the technical team, while informing the user to try again later.
+- [x] Google Authentication Failure: If there is a failure in authentication with Google (for example, the user does not grant permission or there is a technical error on Google's side), the application should inform the user about the problem and suggest trying again later.
+- [x] User Creation Failure: If there is a problem creating a new user record in the database (for example, database connection failure or constraint violations), the application should log the error and possibly notify the technical team, while informing the user to try again later.
 
 ### Security
 
