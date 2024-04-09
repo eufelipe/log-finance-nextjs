@@ -39,7 +39,7 @@ export class AccountPostgreSqlRepository
       id,
       email,
       name,
-      image: image ?? undefined,
+      image,
     };
   }
 }
