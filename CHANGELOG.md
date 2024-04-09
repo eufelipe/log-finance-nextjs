@@ -1,8 +1,13 @@
 # Changelog
 
-This document records all significant changes made to the application. The goal is to keep users and developers informed about the updates, improvements, and fixes that are implemented over time.
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-The format follows the recommendations from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
+### [0.1.1](https://github.com/eufelipe/log-finance-nextjs/compare/v0.1.0...v0.1.1) (2024-04-09)
+
+
+### Features
+
+* add create portfolio use case ([d686abf](https://github.com/eufelipe/log-finance-nextjs/commit/d686abf23709abb8b2c2a305624178ffd2951a97))
 
 ## 0.1.0 (2024-04-01)
 

@@ -1,6 +1,6 @@
 {
   "name": "log-finance-nextjs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "author": {
     "name": "Felipe RosasX",
@@ -23,7 +23,7 @@
     "test:coverage": "vitest run --coverage --silent",
     "prepare": "husky",
     "postinstall": "prisma generate",
-    "release": "standard-version"
+    "release": "standard-version -- --release-as"
   },
   "dependencies": {
     "@prisma/client": "5.11.0",
