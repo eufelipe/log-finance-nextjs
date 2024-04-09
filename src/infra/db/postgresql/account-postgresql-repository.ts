@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Account as PrismaAccount, PrismaClient } from "@prisma/client";
 
 import {
   AddAccountRepository,
@@ -32,12 +32,14 @@ export class AccountPostgreSqlRepository
     return this.mapToAccount(result);
   }
 
-  private mapToAccount(result: any): Account {
+  private mapToAccount(result: PrismaAccount): Account {
+    const { id, email, name, image } = result;
+
     return {
-      id: result.id,
-      email: result.email,
-      name: result.name,
-      image: result.image,
+      id,
+      email,
+      name,
+      image: image ?? undefined,
     };
   }
 }
