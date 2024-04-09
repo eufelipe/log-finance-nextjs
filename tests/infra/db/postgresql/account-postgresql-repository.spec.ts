@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { OAuthUser } from "./../../../../src/domain/models/oauth-user";
 
+import { OAuthUser } from "@/domain/models/oauth-user";
 import { AccountPostgreSqlRepository } from "@/infra";
 import { mockPrismaClient } from "@/tests/mocks";
 

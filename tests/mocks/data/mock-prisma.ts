@@ -5,4 +5,7 @@ export const mockPrismaClient = {
     findUnique: vi.fn(),
     create: vi.fn(),
   },
+  portfolio: {
+    create: vi.fn(),
+  },
 };

@@ -1,13 +1,6 @@
 import { Validation } from "@/validation/contracts";
+import { vi } from "vitest";
 
 export class ValidationSpy implements Validation {
-  error: Error | null = null;
-  input: any;
-
-  validate(input: any): void {
-    this.input = input;
-    if (this.error) {
-      throw this.error;
-    }
-  }
+  validate = vi.fn();
 }
