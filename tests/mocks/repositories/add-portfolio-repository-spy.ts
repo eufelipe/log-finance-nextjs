@@ -8,6 +8,7 @@ export class AddPortfolioRepositorySpy implements AddPortfolioRepository {
   input: PortfolioDTO = {
     name: faker.person.fullName(),
     description: faker.word.words(10),
+    accountId: faker.string.uuid(),
   };
 
   output: Portfolio = {
