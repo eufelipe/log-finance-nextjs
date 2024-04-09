@@ -1,11 +1,11 @@
 import { faker } from "@faker-js/faker";
 
-import { Portfolio } from "@/domain/models";
+import { Portfolio, PortfolioDTO } from "@/domain/models";
 
 import { AddPortfolioRepository } from "@/domain/contracts/repositories";
 
 export class AddPortfolioRepositorySpy implements AddPortfolioRepository {
-  input: Omit<Portfolio, "id"> = {
+  input: PortfolioDTO = {
     name: faker.person.fullName(),
     description: faker.word.words(10),
   };
@@ -16,7 +16,7 @@ export class AddPortfolioRepositorySpy implements AddPortfolioRepository {
     description: faker.word.words(10),
   };
 
-  async add(input: Omit<Portfolio, "id">): Promise<Portfolio> {
+  async add(input: PortfolioDTO): Promise<Portfolio> {
     this.input = input;
 
     return this.output;

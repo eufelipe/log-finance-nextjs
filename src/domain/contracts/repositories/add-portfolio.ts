@@ -1,4 +1,4 @@
-import { Portfolio } from "@/domain/models";
+import { Portfolio, PortfolioDTO } from "@/domain/models";
 
 type Input = AddPortfolioRepository.Input;
 type Output = AddPortfolioRepository.Output;
@@ -8,6 +8,6 @@ export interface AddPortfolioRepository {
 }
 
 export namespace AddPortfolioRepository {
-  export type Input = Omit<Portfolio, "id">;
+  export type Input = PortfolioDTO;
   export type Output = Portfolio;
 }

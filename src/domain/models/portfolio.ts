@@ -4,4 +4,6 @@ export type Portfolio = {
   description?: string | null;
 };
 
+export type PortfolioDTO = Omit<Portfolio, "id"> & { accountId: string };
+
 export default Portfolio;

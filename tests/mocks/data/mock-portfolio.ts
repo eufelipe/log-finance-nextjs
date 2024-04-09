@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
 
-import { Portfolio } from "@/domain/models";
+import { Portfolio, PortfolioDTO } from "@/domain/models";
 
-export const makeFakePortfolioInput = (): Omit<Portfolio, "id"> => ({
+export const makeFakePortfolioInput = (): PortfolioDTO => ({
   name: "My Portfolio",
   description: "This is a sample portfolio",
 });
