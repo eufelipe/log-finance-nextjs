@@ -19,9 +19,9 @@ export class CreatePortfolioUseCase implements CreatePortfolio {
 
       this.validation.validate(name);
 
-      const account = await this.repository.add(input);
+      const portfolio = await this.repository.add(input);
 
-      return account;
+      return portfolio;
     } catch (error) {
       if (error instanceof ValidationError) {
         throw new RequiredFieldError("Invalid name field");
