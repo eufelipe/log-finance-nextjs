@@ -34,9 +34,10 @@ model Portfolio {
   accountId   String  @db.VarChar(36)
   account     Account @relation(fields: [accountId], references: [id])
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  deletedAt      DateTime?
+  PortfolioAsset PortfolioAsset[]
 
   @@index([accountId], name: "idx_portfolio_accountId")
 }
@@ -58,8 +59,46 @@ model Asset {
   dividends             Dividend[]
   fundamentalIndicators FundamentalIndicator[]
   quotes                Quote[]
+  FixedIncome           FixedIncome[]
+  PortfolioAsset        PortfolioAsset[]
 
   @@index([assetType], name: "idx_asset_type")
+}
+
+model PortfolioAsset {
+  portfolioId String    @db.VarChar(32)
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id])
+
+  assetId String @db.VarChar(32)
+  asset   Asset  @relation(fields: [assetId], references: [id])
+
+  quantity Float?
+  buyPrice Float?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@id([portfolioId, assetId])
+  @@index([assetId], name: "idx_portfolioAsset_assetId")
+  @@index([portfolioId], name: "idx_portfolioAsset_portfolioId")
+}
+
+model FixedIncome {
+  id String @id @default(uuid()) @db.VarChar(32)
+
+  assetId String @db.VarChar(32)
+  asset   Asset  @relation(fields: [assetId], references: [id])
+
+  symbol String? @db.VarChar(255)
+  name   String? @db.VarChar(255)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([symbol], name: "idx_fixed_incomes_symbol")
+  @@index([assetId], name: "idx_fixed_incomes_assetId")
 }
 
 model Stock {
@@ -73,8 +112,25 @@ model Stock {
   deletedAt DateTime?
 
   companyInfos CompanyInfo[]
+  Ticker       Ticker[]
 
   @@index([assetId], name: "idx_stock_assetId")
+}
+
+model Ticker {
+  id     String     @id @default(uuid()) @db.VarChar(32)
+  symbol String?    @db.VarChar(45)
+  type   TickerType
+
+  stockId String @db.VarChar(32)
+  stock   Stock  @relation(fields: [stockId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([symbol], name: "idx_tickers_symbol")
+  @@index([stockId], name: "idx_tickers_stockId")
 }
 
 model CompanyInfo {
@@ -208,4 +264,10 @@ enum AssetType {
   CRYPTOCURRENCY
   ETF
   REAL_ESTATE_FUND
+}
+
+enum TickerType {
+  ordinary
+  preferred
+  fractional
 }
