@@ -1,6 +1,7 @@
 codecov
 criptomoedas
 eufelipe
+FOREX
 Postgre
 postgresql
 supabase
