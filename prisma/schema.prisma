@@ -27,4 +27,8 @@ model Portfolio {
   description String? @db.VarChar(255)
   accountId   String  @db.VarChar(36)
   account     Account @relation(fields: [accountId], references: [id])
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
 }
