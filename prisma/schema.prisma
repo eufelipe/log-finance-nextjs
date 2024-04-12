@@ -20,37 +20,41 @@ model Account {
   image      String?     @db.VarChar(255)
   portfolios Portfolio[]
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
   @@index([email], name: "idx_account_email")
+  @@map("accounts")
 }
 
 model Portfolio {
   id          String  @id @default(uuid()) @db.VarChar(36)
   name        String
   description String? @db.VarChar(255)
-  accountId   String  @db.VarChar(36)
-  account     Account @relation(fields: [accountId], references: [id])
 
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  deletedAt      DateTime?
-  PortfolioAsset PortfolioAsset[]
+  accountId String  @map("account_id") @db.VarChar(36)
+  account   Account @relation(fields: [accountId], references: [id])
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  portfolioAssets PortfolioAsset[]
 
   @@index([accountId], name: "idx_portfolio_accountId")
+  @@map("portfolios")
 }
 
 model Asset {
   id          String    @id @default(uuid()) @db.VarChar(36)
   name        String?
-  assetType   AssetType
+  assetType   AssetType @map("asset_type")
   description String?
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
   stocks                Stock[]
   cryptoCurrencies      CryptoCurrency[]
@@ -59,204 +63,216 @@ model Asset {
   dividends             Dividend[]
   fundamentalIndicators FundamentalIndicator[]
   quotes                Quote[]
-  FixedIncome           FixedIncome[]
-  PortfolioAsset        PortfolioAsset[]
+  fixedIncomes          FixedIncome[]
+  portfolioAssets       PortfolioAsset[]
 
   @@index([assetType], name: "idx_asset_type")
+  @@map("assets")
 }
 
 model PortfolioAsset {
-  portfolioId String    @db.VarChar(32)
+  portfolioId String    @map("portfolio_id") @db.VarChar(36)
   portfolio   Portfolio @relation(fields: [portfolioId], references: [id])
 
-  assetId String @db.VarChar(32)
+  assetId String @map("asset_id") @db.VarChar(36)
   asset   Asset  @relation(fields: [assetId], references: [id])
 
   quantity Float?
-  buyPrice Float?
+  buyPrice Float? @map("buy_price")
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
   @@id([portfolioId, assetId])
   @@index([assetId], name: "idx_portfolioAsset_assetId")
   @@index([portfolioId], name: "idx_portfolioAsset_portfolioId")
+  @@map("portfolios_has_assets")
 }
 
 model FixedIncome {
-  id String @id @default(uuid()) @db.VarChar(32)
+  id String @id @default(uuid()) @db.VarChar(36)
 
-  assetId String @db.VarChar(32)
+  assetId String @map("asset_id") @db.VarChar(36)
   asset   Asset  @relation(fields: [assetId], references: [id])
 
   symbol String? @db.VarChar(255)
   name   String? @db.VarChar(255)
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
   @@index([symbol], name: "idx_fixed_incomes_symbol")
   @@index([assetId], name: "idx_fixed_incomes_assetId")
+  @@map("fixed_incomes")
 }
 
 model Stock {
   id String @id @default(uuid()) @db.VarChar(36)
 
-  assetId String @db.VarChar(36)
+  assetId String @map("asset_id") @db.VarChar(36)
   asset   Asset  @relation(fields: [assetId], references: [id])
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
   companyInfos CompanyInfo[]
-  Ticker       Ticker[]
+  tickers      Ticker[]
 
   @@index([assetId], name: "idx_stock_assetId")
+  @@map("stocks")
 }
 
 model Ticker {
-  id     String     @id @default(uuid()) @db.VarChar(32)
+  id     String     @id @default(uuid()) @db.VarChar(36)
   symbol String?    @db.VarChar(45)
   type   TickerType
 
-  stockId String @db.VarChar(32)
+  stockId String @map("stock_id") @db.VarChar(36)
   stock   Stock  @relation(fields: [stockId], references: [id])
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
   @@index([symbol], name: "idx_tickers_symbol")
   @@index([stockId], name: "idx_tickers_stockId")
+  @@map("tickers")
 }
 
 model CompanyInfo {
-  stockId String @id @db.VarChar(36)
+  stockId String @id @map("stock_id") @db.VarChar(36)
   stock   Stock  @relation(fields: [stockId], references: [id])
 
-  marketValue    Float
-  firmValue      Float?
-  equity         Float?
-  totalStocks    Float?
-  assets         Float?
-  currentAssets  Float?
-  availability   Float?
-  listingSegment String?
-  freeFloat      Float?
-  tagAlong       Float?
-  dailyLiquidity Float?
+  marketValue    Float   @map("market_value")
+  firmValue      Float?  @map("firm_value")
+  equity         Float?  @map("equity")
+  totalStocks    Float?  @map("total_stocks")
+  assets         Float?  @map("assets")
+  currentAssets  Float?  @map("current_assets")
+  availability   Float?  @map("availability")
+  listingSegment String? @map("listing_segment")
+  freeFloat      Float?  @map("free_float")
+  tagAlong       Float?  @map("tag_along")
+  dailyLiquidity Float?  @map("daily_liquidity")
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
   @@index([stockId], name: "idx_companyinfo_stockId")
+  @@map("company_infos")
 }
 
 model CryptoCurrency {
   id String @id @default(uuid()) @db.VarChar(36)
 
-  assetId String @db.VarChar(36)
+  assetId String @map("asset_id") @db.VarChar(36)
   asset   Asset  @relation(fields: [assetId], references: [id])
 
   symbol            String?
-  marketCap         Float?
-  circulatingSupply Float?
+  marketCap         Float?  @map("market_cap")
+  circulatingSupply Float?  @map("circulating_supply")
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
   @@index([symbol], name: "idx_crypto_symbol")
   @@index([assetId], name: "idx_crypto_assetId")
+  @@map("crypto_currencies")
 }
 
 model ETF {
   id String @id @default(uuid()) @db.VarChar(36)
 
-  assetId String @db.VarChar(36)
+  assetId String @map("asset_id") @db.VarChar(36)
   asset   Asset  @relation(fields: [assetId], references: [id])
 
   symbol String?
   name   String?
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
   @@index([symbol], name: "idx_etf_symbol")
   @@index([assetId], name: "idx_etf_assetId")
+  @@map("etfs")
 }
 
 model RealEstateFund {
   id String @id @default(uuid()) @db.VarChar(36)
 
-  assetId String @db.VarChar(36)
+  assetId String @map("asset_id") @db.VarChar(36)
   asset   Asset  @relation(fields: [assetId], references: [id])
 
   symbol String?
   name   String?
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
   @@index([symbol], name: "idx_real_estate_fund_symbol")
   @@index([assetId], name: "idx_real_estate_fund_assetId")
+  @@map("real_estate_funds")
 }
 
 model Dividend {
   id String @id @default(uuid()) @db.VarChar(36)
 
-  assetId String @db.VarChar(36)
+  assetId String @map("asset_id") @db.VarChar(36)
   asset   Asset  @relation(fields: [assetId], references: [id])
 
-  dividendAmount Float?
-  paymentDate    DateTime?
+  dividendAmount Float?    @map("dividend_amount")
+  paymentDate    DateTime? @map("payment_date")
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
   @@index([assetId], name: "idx_dividend_assetId")
+  @@map("dividends")
 }
 
 model FundamentalIndicator {
   id String @id @default(uuid()) @db.VarChar(36)
 
-  assetId String @db.VarChar(36)
+  assetId String @map("asset_id") @db.VarChar(36)
   asset   Asset  @relation(fields: [assetId], references: [id])
 
   type          String?
   value         Float?
-  referenceDate DateTime?
+  referenceDate DateTime? @map("reference_date")
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
   @@index([assetId], name: "idx_fundamental_assetId")
+  @@map("fundamental_indicators")
 }
 
 model Quote {
   id String @id @default(uuid()) @db.VarChar(36)
 
-  assetId String @db.VarChar(36)
+  assetId String @map("asset_id") @db.VarChar(36)
   asset   Asset  @relation(fields: [assetId], references: [id])
 
-  quoteDate  DateTime?
-  openPrice  Float?
-  closePrice Float?
+  quoteDate  DateTime? @map("quote_date")
+  openPrice  Float?    @map("open_price")
+  closePrice Float?    @map("close_price")
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
   @@index([assetId], name: "idx_quote_assetId")
   @@index([quoteDate], name: "idx_quote_quoteDate")
+  @@map("quotes")
 }
 
 enum AssetType {
@@ -264,10 +280,25 @@ enum AssetType {
   CRYPTOCURRENCY
   ETF
   REAL_ESTATE_FUND
+  FIXED_INCOME
+  COMMODITY
+  MUTUAL_FUND
+  OPTIONS
+  FUTURES
+  SWAPS
+  PRIVATE_DEBT
+  FOREX
+  PRIVATE_EQUITY
+  VENTURE_CAPITAL
+  DIRECT_REAL_ESTATE
 }
 
 enum TickerType {
   ordinary
   preferred
   fractional
+  depositaryReceipt
+  convertible
+  restricted
+  treasury
 }
