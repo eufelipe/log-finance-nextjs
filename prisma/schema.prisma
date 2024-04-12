@@ -23,6 +23,8 @@ model Account {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+
+  @@index([email], name: "idx_account_email")
 }
 
 model Portfolio {
@@ -35,6 +37,8 @@ model Portfolio {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+
+  @@index([accountId], name: "idx_portfolio_accountId")
 }
 
 model Asset {
@@ -54,6 +58,8 @@ model Asset {
   dividends             Dividend[]
   fundamentalIndicators FundamentalIndicator[]
   quotes                Quote[]
+
+  @@index([assetType], name: "idx_asset_type")
 }
 
 model Stock {
@@ -67,6 +73,8 @@ model Stock {
   deletedAt DateTime?
 
   companyInfos CompanyInfo[]
+
+  @@index([assetId], name: "idx_stock_assetId")
 }
 
 model CompanyInfo {
@@ -88,6 +96,8 @@ model CompanyInfo {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+
+  @@index([stockId], name: "idx_companyinfo_stockId")
 }
 
 model CryptoCurrency {
@@ -103,6 +113,9 @@ model CryptoCurrency {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+
+  @@index([symbol], name: "idx_crypto_symbol")
+  @@index([assetId], name: "idx_crypto_assetId")
 }
 
 model ETF {
@@ -117,6 +130,9 @@ model ETF {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+
+  @@index([symbol], name: "idx_etf_symbol")
+  @@index([assetId], name: "idx_etf_assetId")
 }
 
 model RealEstateFund {
@@ -131,6 +147,9 @@ model RealEstateFund {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+
+  @@index([symbol], name: "idx_real_estate_fund_symbol")
+  @@index([assetId], name: "idx_real_estate_fund_assetId")
 }
 
 model Dividend {
@@ -145,6 +164,8 @@ model Dividend {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+
+  @@index([assetId], name: "idx_dividend_assetId")
 }
 
 model FundamentalIndicator {
@@ -160,6 +181,8 @@ model FundamentalIndicator {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+
+  @@index([assetId], name: "idx_fundamental_assetId")
 }
 
 model Quote {
@@ -175,6 +198,9 @@ model Quote {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+
+  @@index([assetId], name: "idx_quote_assetId")
+  @@index([quoteDate], name: "idx_quote_quoteDate")
 }
 
 enum AssetType {
