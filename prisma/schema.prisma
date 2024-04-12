@@ -19,6 +19,10 @@ model Account {
   name       String      @db.VarChar(255)
   image      String?     @db.VarChar(255)
   portfolios Portfolio[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 }
 
 model Portfolio {
@@ -28,7 +32,154 @@ model Portfolio {
   accountId   String  @db.VarChar(36)
   account     Account @relation(fields: [accountId], references: [id])
 
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  deleted_at DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model Asset {
+  id          String    @id @default(uuid()) @db.VarChar(36)
+  name        String?
+  assetType   AssetType
+  description String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  stocks                Stock[]
+  cryptoCurrencies      CryptoCurrency[]
+  etfs                  ETF[]
+  realEstateFunds       RealEstateFund[]
+  dividends             Dividend[]
+  fundamentalIndicators FundamentalIndicator[]
+  quotes                Quote[]
+}
+
+model Stock {
+  id String @id @default(uuid()) @db.VarChar(36)
+
+  assetId String @db.VarChar(36)
+  asset   Asset  @relation(fields: [assetId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  companyInfos CompanyInfo[]
+}
+
+model CompanyInfo {
+  stockId String @id @db.VarChar(36)
+  stock   Stock  @relation(fields: [stockId], references: [id])
+
+  marketValue    Float
+  firmValue      Float?
+  equity         Float?
+  totalStocks    Float?
+  assets         Float?
+  currentAssets  Float?
+  availability   Float?
+  listingSegment String?
+  freeFloat      Float?
+  tagAlong       Float?
+  dailyLiquidity Float?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model CryptoCurrency {
+  id String @id @default(uuid()) @db.VarChar(36)
+
+  assetId String @db.VarChar(36)
+  asset   Asset  @relation(fields: [assetId], references: [id])
+
+  symbol            String?
+  marketCap         Float?
+  circulatingSupply Float?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model ETF {
+  id String @id @default(uuid()) @db.VarChar(36)
+
+  assetId String @db.VarChar(36)
+  asset   Asset  @relation(fields: [assetId], references: [id])
+
+  symbol String?
+  name   String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model RealEstateFund {
+  id String @id @default(uuid()) @db.VarChar(36)
+
+  assetId String @db.VarChar(36)
+  asset   Asset  @relation(fields: [assetId], references: [id])
+
+  symbol String?
+  name   String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model Dividend {
+  id String @id @default(uuid()) @db.VarChar(36)
+
+  assetId String @db.VarChar(36)
+  asset   Asset  @relation(fields: [assetId], references: [id])
+
+  dividendAmount Float?
+  paymentDate    DateTime?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model FundamentalIndicator {
+  id String @id @default(uuid()) @db.VarChar(36)
+
+  assetId String @db.VarChar(36)
+  asset   Asset  @relation(fields: [assetId], references: [id])
+
+  type          String?
+  value         Float?
+  referenceDate DateTime?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model Quote {
+  id String @id @default(uuid()) @db.VarChar(36)
+
+  assetId String @db.VarChar(36)
+  asset   Asset  @relation(fields: [assetId], references: [id])
+
+  quoteDate  DateTime?
+  openPrice  Float?
+  closePrice Float?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+enum AssetType {
+  STOCK
+  CRYPTOCURRENCY
+  ETF
+  REAL_ESTATE_FUND
 }
