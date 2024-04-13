@@ -1,3 +1,5 @@
+import { CryptoCurrency, ETF, RealEstateFund, Stock } from "@/domain/models";
+
 export type AssetType =
   | "STOCK"
   | "CRYPTOCURRENCY"
@@ -15,11 +17,14 @@ export type AssetType =
   | "VENTURE_CAPITAL"
   | "DIRECT_REAL_ESTATE";
 
-export type Asset = {
+export type AssetDetails = Stock | RealEstateFund | CryptoCurrency | ETF;
+
+export interface Asset {
   id: string;
-  name: string;
+  name?: string;
   assetType: AssetType;
   description?: string;
-};
+  details: AssetDetails | null;
+}
 
 export default Asset;
