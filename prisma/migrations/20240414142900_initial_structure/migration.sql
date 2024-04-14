@@ -2,7 +2,7 @@
 CREATE TYPE "AssetType" AS ENUM ('STOCK', 'CRYPTOCURRENCY', 'ETF', 'REAL_ESTATE_FUND', 'FIXED_INCOME', 'COMMODITY', 'MUTUAL_FUND', 'OPTIONS', 'FUTURES', 'SWAPS', 'PRIVATE_DEBT', 'FOREX', 'PRIVATE_EQUITY', 'VENTURE_CAPITAL', 'DIRECT_REAL_ESTATE');
 
 -- CreateEnum
-CREATE TYPE "TickerType" AS ENUM ('ordinary', 'preferred', 'fractional', 'depositaryReceipt', 'convertible', 'restricted', 'treasury');
+CREATE TYPE "TickerType" AS ENUM ('ORDINARY', 'PREFERRED', 'FRACTIONAL', 'DEPOSITARY_RECEIPT', 'CONVERTIBLE', 'RESTRICTED', 'TREASURY');
 
 -- CreateTable
 CREATE TABLE "accounts" (
@@ -34,6 +34,7 @@ CREATE TABLE "portfolios" (
 CREATE TABLE "assets" (
     "id" VARCHAR(36) NOT NULL,
     "name" TEXT,
+    "symbol" VARCHAR(45),
     "asset_type" "AssetType" NOT NULL,
     "description" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -60,7 +61,6 @@ CREATE TABLE "portfolios_has_assets" (
 CREATE TABLE "fixed_incomes" (
     "id" VARCHAR(36) NOT NULL,
     "asset_id" VARCHAR(36) NOT NULL,
-    "symbol" VARCHAR(255),
     "name" VARCHAR(255),
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -71,8 +71,10 @@ CREATE TABLE "fixed_incomes" (
 
 -- CreateTable
 CREATE TABLE "stocks" (
-    "id" VARCHAR(36) NOT NULL,
+    "id" TEXT NOT NULL,
     "asset_id" VARCHAR(36) NOT NULL,
+    "company_id" TEXT NOT NULL,
+    "type" "TickerType" NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "deleted_at" TIMESTAMP(3),
@@ -81,21 +83,9 @@ CREATE TABLE "stocks" (
 );
 
 -- CreateTable
-CREATE TABLE "tickers" (
-    "id" VARCHAR(36) NOT NULL,
-    "symbol" VARCHAR(45),
-    "type" "TickerType" NOT NULL,
-    "stock_id" VARCHAR(36) NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-    "deleted_at" TIMESTAMP(3),
-
-    CONSTRAINT "tickers_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "company_infos" (
-    "stock_id" VARCHAR(36) NOT NULL,
+CREATE TABLE "companies" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
     "market_value" DOUBLE PRECISION NOT NULL,
     "firm_value" DOUBLE PRECISION,
     "equity" DOUBLE PRECISION,
@@ -111,14 +101,13 @@ CREATE TABLE "company_infos" (
     "updated_at" TIMESTAMP(3) NOT NULL,
     "deleted_at" TIMESTAMP(3),
 
-    CONSTRAINT "company_infos_pkey" PRIMARY KEY ("stock_id")
+    CONSTRAINT "companies_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "crypto_currencies" (
     "id" VARCHAR(36) NOT NULL,
     "asset_id" VARCHAR(36) NOT NULL,
-    "symbol" TEXT,
     "market_cap" DOUBLE PRECISION,
     "circulating_supply" DOUBLE PRECISION,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -132,7 +121,6 @@ CREATE TABLE "crypto_currencies" (
 CREATE TABLE "etfs" (
     "id" VARCHAR(36) NOT NULL,
     "asset_id" VARCHAR(36) NOT NULL,
-    "symbol" TEXT,
     "name" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -145,7 +133,6 @@ CREATE TABLE "etfs" (
 CREATE TABLE "real_estate_funds" (
     "id" VARCHAR(36) NOT NULL,
     "asset_id" VARCHAR(36) NOT NULL,
-    "symbol" TEXT,
     "name" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -208,13 +195,16 @@ CREATE INDEX "idx_portfolio_accountId" ON "portfolios"("account_id");
 CREATE INDEX "idx_asset_type" ON "assets"("asset_type");
 
 -- CreateIndex
+CREATE INDEX "idx_asset_symbol" ON "assets"("symbol");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "assets_symbol_asset_type_key" ON "assets"("symbol", "asset_type");
+
+-- CreateIndex
 CREATE INDEX "idx_portfolioAsset_assetId" ON "portfolios_has_assets"("asset_id");
 
 -- CreateIndex
 CREATE INDEX "idx_portfolioAsset_portfolioId" ON "portfolios_has_assets"("portfolio_id");
-
--- CreateIndex
-CREATE INDEX "idx_fixed_incomes_symbol" ON "fixed_incomes"("symbol");
 
 -- CreateIndex
 CREATE INDEX "idx_fixed_incomes_assetId" ON "fixed_incomes"("asset_id");
@@ -223,28 +213,13 @@ CREATE INDEX "idx_fixed_incomes_assetId" ON "fixed_incomes"("asset_id");
 CREATE INDEX "idx_stock_assetId" ON "stocks"("asset_id");
 
 -- CreateIndex
-CREATE INDEX "idx_tickers_symbol" ON "tickers"("symbol");
-
--- CreateIndex
-CREATE INDEX "idx_tickers_stockId" ON "tickers"("stock_id");
-
--- CreateIndex
-CREATE INDEX "idx_companyinfo_stockId" ON "company_infos"("stock_id");
-
--- CreateIndex
-CREATE INDEX "idx_crypto_symbol" ON "crypto_currencies"("symbol");
+CREATE INDEX "idx_stock_companyId" ON "stocks"("company_id");
 
 -- CreateIndex
 CREATE INDEX "idx_crypto_assetId" ON "crypto_currencies"("asset_id");
 
 -- CreateIndex
-CREATE INDEX "idx_etf_symbol" ON "etfs"("symbol");
-
--- CreateIndex
 CREATE INDEX "idx_etf_assetId" ON "etfs"("asset_id");
-
--- CreateIndex
-CREATE INDEX "idx_real_estate_fund_symbol" ON "real_estate_funds"("symbol");
 
 -- CreateIndex
 CREATE INDEX "idx_real_estate_fund_assetId" ON "real_estate_funds"("asset_id");
@@ -277,10 +252,7 @@ ALTER TABLE "fixed_incomes" ADD CONSTRAINT "fixed_incomes_asset_id_fkey" FOREIGN
 ALTER TABLE "stocks" ADD CONSTRAINT "stocks_asset_id_fkey" FOREIGN KEY ("asset_id") REFERENCES "assets"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "tickers" ADD CONSTRAINT "tickers_stock_id_fkey" FOREIGN KEY ("stock_id") REFERENCES "stocks"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "company_infos" ADD CONSTRAINT "company_infos_stock_id_fkey" FOREIGN KEY ("stock_id") REFERENCES "stocks"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "stocks" ADD CONSTRAINT "stocks_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "crypto_currencies" ADD CONSTRAINT "crypto_currencies_asset_id_fkey" FOREIGN KEY ("asset_id") REFERENCES "assets"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

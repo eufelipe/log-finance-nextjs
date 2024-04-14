@@ -47,8 +47,11 @@ model Portfolio {
 }
 
 model Asset {
-  id          String    @id @default(uuid()) @db.VarChar(36)
-  name        String?
+  id   String  @id @default(uuid()) @db.VarChar(36)
+  name String?
+
+  symbol String? @db.VarChar(45)
+
   assetType   AssetType @map("asset_type")
   description String?
 
@@ -66,7 +69,9 @@ model Asset {
   fixedIncomes          FixedIncome[]
   portfolioAssets       PortfolioAsset[]
 
+  @@unique([symbol, assetType], name: "unique_symbol_assetType")
   @@index([assetType], name: "idx_asset_type")
+  @@index([symbol], name: "idx_asset_symbol")
   @@map("assets")
 }
 
@@ -96,55 +101,39 @@ model FixedIncome {
   assetId String @map("asset_id") @db.VarChar(36)
   asset   Asset  @relation(fields: [assetId], references: [id])
 
-  symbol String? @db.VarChar(255)
-  name   String? @db.VarChar(255)
+  name String? @db.VarChar(255)
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
-  @@index([symbol], name: "idx_fixed_incomes_symbol")
   @@index([assetId], name: "idx_fixed_incomes_assetId")
   @@map("fixed_incomes")
 }
 
 model Stock {
-  id String @id @default(uuid()) @db.VarChar(36)
+  id String @id @default(uuid())
 
   assetId String @map("asset_id") @db.VarChar(36)
   asset   Asset  @relation(fields: [assetId], references: [id])
 
+  companyId String  @map("company_id")
+  company   Company @relation(fields: [companyId], references: [id])
+
+  type TickerType
+
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
-  companyInfos CompanyInfo[]
-  tickers      Ticker[]
-
   @@index([assetId], name: "idx_stock_assetId")
+  @@index([companyId], name: "idx_stock_companyId")
   @@map("stocks")
 }
 
-model Ticker {
-  id     String     @id @default(uuid()) @db.VarChar(36)
-  symbol String?    @db.VarChar(45)
-  type   TickerType
-
-  stockId String @map("stock_id") @db.VarChar(36)
-  stock   Stock  @relation(fields: [stockId], references: [id])
-
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
-
-  @@index([symbol], name: "idx_tickers_symbol")
-  @@index([stockId], name: "idx_tickers_stockId")
-  @@map("tickers")
-}
-
-model CompanyInfo {
-  stockId String @id @map("stock_id") @db.VarChar(36)
-  stock   Stock  @relation(fields: [stockId], references: [id])
+model Company {
+  id   String @id @default(uuid())
+  name String
 
   marketValue    Float   @map("market_value")
   firmValue      Float?  @map("firm_value")
@@ -158,12 +147,13 @@ model CompanyInfo {
   tagAlong       Float?  @map("tag_along")
   dailyLiquidity Float?  @map("daily_liquidity")
 
+  stocks Stock[]
+
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
-  @@index([stockId], name: "idx_companyinfo_stockId")
-  @@map("company_infos")
+  @@map("companies")
 }
 
 model CryptoCurrency {
@@ -172,15 +162,13 @@ model CryptoCurrency {
   assetId String @map("asset_id") @db.VarChar(36)
   asset   Asset  @relation(fields: [assetId], references: [id])
 
-  symbol            String?
-  marketCap         Float?  @map("market_cap")
-  circulatingSupply Float?  @map("circulating_supply")
+  marketCap         Float? @map("market_cap")
+  circulatingSupply Float? @map("circulating_supply")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
-  @@index([symbol], name: "idx_crypto_symbol")
   @@index([assetId], name: "idx_crypto_assetId")
   @@map("crypto_currencies")
 }
@@ -191,14 +179,12 @@ model ETF {
   assetId String @map("asset_id") @db.VarChar(36)
   asset   Asset  @relation(fields: [assetId], references: [id])
 
-  symbol String?
-  name   String?
+  name String?
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
-  @@index([symbol], name: "idx_etf_symbol")
   @@index([assetId], name: "idx_etf_assetId")
   @@map("etfs")
 }
@@ -209,14 +195,12 @@ model RealEstateFund {
   assetId String @map("asset_id") @db.VarChar(36)
   asset   Asset  @relation(fields: [assetId], references: [id])
 
-  symbol String?
-  name   String?
+  name String?
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
-  @@index([symbol], name: "idx_real_estate_fund_symbol")
   @@index([assetId], name: "idx_real_estate_fund_assetId")
   @@map("real_estate_funds")
 }
@@ -294,11 +278,11 @@ enum AssetType {
 }
 
 enum TickerType {
-  ordinary
-  preferred
-  fractional
-  depositaryReceipt
-  convertible
-  restricted
-  treasury
+  ORDINARY
+  PREFERRED
+  FRACTIONAL
+  DEPOSITARY_RECEIPT
+  CONVERTIBLE
+  RESTRICTED
+  TREASURY
 }
