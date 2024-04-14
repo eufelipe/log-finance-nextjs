@@ -21,8 +21,11 @@ export type AssetDetails = Stock | RealEstateFund | CryptoCurrency | ETF;
 
 export interface Asset {
   id: string;
-  name?: string;
+  name: string;
+
+  symbol: string;
   assetType: AssetType;
+
   description?: string;
   details: AssetDetails | null;
 }
