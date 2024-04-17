@@ -1,3 +1,3 @@
-export * from "./add-account-repository-spy";
-export * from "./add-portfolio-repository-spy";
-export * from "./load-account-by-email-repository-spy";
+export * from "./account-repository-spy";
+export * from "./assets-repository-spy";
+export * from "./portfolio-repository-spy";
